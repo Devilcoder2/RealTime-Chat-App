@@ -1,5 +1,7 @@
 import { Box, Stack, Typography } from "@mui/material";
 import { Link } from "../styles/StyledComponents";
+import { memo } from "react";
+import AvatarCard from "./AvatarCard";
 
 const ChatItem = ({
   avatar = [],
@@ -10,10 +12,18 @@ const ChatItem = ({
   isOnline,
   newMessageAlert,
   index = 0,
-  handleDeleteChatOpen,
+  handleDeleteChat,
 }) => {
   return (
-    <Link to={`/chat/${_id}`}>
+    <Link
+      sx={{
+        padding: "0",
+      }}
+      to={`/chat/${_id}`}
+      onContextMenu={(e) => {
+        handleDeleteChat(e, _id, groupChat);
+      }}
+    >
       <div
         style={{
           display: "flex",
@@ -25,6 +35,7 @@ const ChatItem = ({
           position: "relative",
         }}
       >
+        <AvatarCard avatar={avatar} />
         <Stack>
           <Typography>{name}</Typography>
           {newMessageAlert && (
@@ -51,4 +62,4 @@ const ChatItem = ({
   );
 };
 
-export default ChatItem;
+export default memo(ChatItem);
