@@ -1,4 +1,12 @@
-import { Avatar, Dialog, DialogTitle, Stack, Typography } from "@mui/material";
+import {
+  Avatar,
+  Button,
+  Dialog,
+  DialogTitle,
+  Stack,
+  Typography,
+  ListItem,
+} from "@mui/material";
 import { sampleNotifications } from "../../constants/sampleData";
 import { memo } from "react";
 
@@ -49,23 +57,20 @@ const NotificationItem = memo(({ sender, _id, handler }) => {
             width: "100%",
           }}
         >
-          {`{name} sent you a frined request`}
+          {`${name} sent you a frined request`}
         </Typography>
 
-        <IconButton
-          size="small"
-          sx={{
-            bgcolor: "primary.main",
-            color: "white",
-            "&:hover": {
-              bgcolor: "primary.dark",
-            },
+        <Stack
+          direction={{
+            xs: "column",
+            sm: "row",
           }}
-          onClick={() => handler(_id)}
-          disabled={handerIsLoading}
         >
-          <AddIcon />
-        </IconButton>
+          <Button onClick={() => handler({ _id, accept: true })}>Accept</Button>
+          <Button color="error" onClick={() => handler({ _id, accept: false })}>
+            Reject
+          </Button>
+        </Stack>
       </Stack>
     </ListItem>
   );
