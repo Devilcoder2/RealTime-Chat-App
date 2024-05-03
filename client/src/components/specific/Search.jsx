@@ -1,18 +1,17 @@
+import { useInputValidation } from "6pp";
+import { Search as SearchIcon } from "@mui/icons-material";
 import {
   Dialog,
   DialogTitle,
   InputAdornment,
   List,
   ListItem,
-  ListItemText,
   Stack,
   TextField,
 } from "@mui/material";
-import { useInputValidation } from "6pp";
-import { Search as SearchIcon } from "@mui/icons-material";
-import UserItem from "../shared/UserItem";
 import { useState } from "react";
 import { sampleUsers } from "../../constants/sampleData";
+import UserItem from "../shared/UserItem";
 
 const Search = () => {
   const search = useInputValidation("");
