@@ -311,7 +311,10 @@ const Group = () => {
 const GroupsList = ({ w = "100%", myGroups = [], chatId }) => {
   return (
     <>
-      <Stack width={w} sx={{ backgroundImage: bgGradient, height: "100vh" }}>
+      <Stack
+        width={w}
+        sx={{ backgroundImage: bgGradient, height: "100vh", overflow: "auto" }}
+      >
         {myGroups.length > 0 ? (
           myGroups.map((group) => (
             <GroupListItem group={group} chatId={chatId} key={group._id} />
