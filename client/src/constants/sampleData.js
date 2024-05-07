@@ -153,4 +153,29 @@ export const dashboardData = {
       },
     },
   ],
+
+  messages: [
+    {
+      attachments: [],
+      content: "This is a message",
+      _id: "aldkjfaldksfa",
+      sender: {
+        avatar: "https://www.w3schools.com/howto/img_avatar.png",
+        name: "Raman",
+      },
+      chat: "chatId",
+      createdAt: "2024-02-12T10:41:30.630Z",
+    },
+    {
+      attachments: [],
+      content: "This is a message2",
+      _id: "aldkjfaladfadsfdksfa",
+      sender: {
+        avatar: "https://www.w3schools.com/howto/img_avatar.png",
+        name: "Aman",
+      },
+      chat: "chatId",
+      createdAt: "2024-02-12T10:41:30.630Z",
+    },
+  ],
 };

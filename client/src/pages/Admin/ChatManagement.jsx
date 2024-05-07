@@ -1,10 +1,10 @@
-import Table from "../../components/shared/Table";
-import AdminLayout from "../../components/layout/AdminLayout";
-import { useEffect, useState } from "react";
 import { Avatar, Stack } from "@mui/material";
+import { useEffect, useState } from "react";
+import AdminLayout from "../../components/layout/AdminLayout";
+import AvatarCard from "../../components/shared/AvatarCard";
+import Table from "../../components/shared/Table";
 import { dashboardData } from "../../constants/sampleData";
 import { transformImage } from "../../lib/features";
-import AvatarCard from "../../components/shared/AvatarCard";
 
 const columns = [
   {
