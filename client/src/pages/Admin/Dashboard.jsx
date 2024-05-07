@@ -1,5 +1,3 @@
-import { Box, Container, Paper, Stack, Typography } from "@mui/material";
-import AdminLayout from "../../components/layout/AdminLayout";
 import {
   AdminPanelSettings as AdminPanelSettingsIcon,
   Group as GroupIcon,
@@ -7,7 +5,10 @@ import {
   Notifications as NotificationsIcon,
   Person as PersonIcon,
 } from "@mui/icons-material";
+import { Box, Container, Paper, Stack, Typography } from "@mui/material";
 import moment from "moment";
+import AdminLayout from "../../components/layout/AdminLayout";
+import { DoughnutChart, LineChart } from "../../components/specific/Charts";
 import {
   CurveButton,
   SearchField,
@@ -66,7 +67,21 @@ const Dashboard = () => {
       <Container component={"main"}>
         {Appbar}
 
-        <Stack direction={"row"} spacing={"2rem"} flexWrap={"wrap"}>
+        <Stack
+          direction={{
+            xs: "column",
+            lg: "row",
+          }}
+          sx={{
+            gap: "2rem",
+          }}
+          flexWrap={"wrap"}
+          justifyContent={"center"}
+          alignItems={{
+            xs: "center",
+            lg: "stretch",
+          }}
+        >
           <Paper
             elevation={3}
             sx={{
@@ -74,13 +89,12 @@ const Dashboard = () => {
               borderRadius: "1rem",
               width: "100%",
               maxWidth: "45rem",
-              height: "25rem",
             }}
           >
             <Typography margin={"2rem 0"} variant="h4">
               Last Messages
             </Typography>
-            {"Chat"}
+            <LineChart value={[12, 34, 64, 12, 45, 56]} />
           </Paper>
 
           <Paper
@@ -95,10 +109,12 @@ const Dashboard = () => {
               position: "relative",
               width: "100%",
               maxWidth: "25rem",
-              height: "25rem",
             }}
           >
-            Dougnut chart
+            <DoughnutChart
+              labels={["Single Chats", "Group Chats"]}
+              value={[23, 66]}
+            />
             <Stack
               position={"absolute"}
               direction={"row"}
