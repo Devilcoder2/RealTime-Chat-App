@@ -37,6 +37,13 @@ const login = TryCatch(async (req, res, next) => {
   sendToken(res, user, 201, `Welcome Back ${user.name}`);
 });
 
-const getMyProfile = async (req, res) => {};
+const getMyProfile = TryCatch(async (req, res) => {
+  const user = await User.findById(req.user);
+
+  res.status(200).json({
+    success: true,
+    user,
+  });
+});
 
 export { newUser, login, getMyProfile };
