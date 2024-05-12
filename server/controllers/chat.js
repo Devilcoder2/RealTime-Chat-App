@@ -33,4 +33,26 @@ const newGroupChat = TryCatch(async (req, res, next) => {
   });
 });
 
-export { newGroupChat };
+const getMyChats = TryCatch(async (req, res, next) => {
+  if (members.length < 2) {
+    return next(
+      new ErrorHandler("Group chat must have atleast 2 members", 400)
+    );
+  }
+
+  const allMembers = [...members, req.user];
+
+  await Chat.create({
+    name,
+    groupChat: true,
+    creator: req.user,
+    members: allMembers,
+  });
+
+  return res.status(201).json({
+    success: true,
+    message: "Group created",
+  });
+});
+
+export { newGroupChat, getMyChats };
