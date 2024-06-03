@@ -18,6 +18,7 @@ const port = process.env.PORT || 3000;
 connectDB(mongoURI);
 
 const app = express();
+
 app.use(express.json());
 app.use(cookieParser());
 
