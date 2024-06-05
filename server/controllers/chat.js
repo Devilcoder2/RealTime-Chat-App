@@ -4,6 +4,7 @@ import { Chat } from "../models/chat.js";
 import { emitEvent } from "../utils/features.js";
 import { ALERT, REFETCH_CHATS } from "../constants/events.js";
 import { getOtherMember } from "../lib/helper.js";
+import { User } from "../models/user.js";
 
 const newGroupChat = TryCatch(async (req, res, next) => {
   const { name, members } = req.body;
@@ -110,7 +111,7 @@ const addMembers = TryCatch(async (req, res, next) => {
     .filter((i) => !chat.members.includes(i._id.toString()))
     .map((i) => i._id);
 
-  chat.members.push(uniqueMembers);
+  chat.members = [...new Set([...chat.members, ...uniqueMembers])];
 
   if (chat.members.length > 100)
     return next(new ErrorHandler("Group members limit reached", 400));
@@ -130,7 +131,6 @@ const addMembers = TryCatch(async (req, res, next) => {
 
   return res.status(200).json({
     success: true,
-    groups,
   });
 });
 
@@ -174,4 +174,51 @@ const removeMember = TryCatch(async (req, res, next) => {
   });
 });
 
-export { newGroupChat, getMyChats, getMyGroups, addMembers, removeMember };
+const leaveGroup = TryCatch(async (req, res, next) => {
+  const chatId = req.params.id;
+
+  const chat = await Chat.findById(chatId);
+
+  if (!chat) return next(new ErrorHandler("Chat not found", 404));
+
+  if (!chat.groupChat)
+    return next(new ErrorHandler("This is not a group chat", 400));
+
+  const remainingMembers = chat.members.filter(
+    (member) => member.toString() !== req.user.toString()
+  );
+
+  if (remainingMembers.length < 3)
+    return next(new ErrorHandler("Group must have atleast 3 members", 400));
+
+  if (chat.creator.toString() === req.user.toString()) {
+    const randomElement = Math.floor(Math.random() * remainingMembers.length);
+    const newCreator = remainingMembers[randomElement];
+    chat.creator = newCreator;
+  }
+
+  chat.members = remainingMembers;
+
+  const [user] = await Promise.all([
+    User.findById(req.user, "name"),
+    chat.save(),
+  ]);
+
+  emitEvent(req, ALERT, chat.members, `User ${user.name} has left the group`);
+
+  emitEvent(req, REFETCH_CHATS, chat.members);
+
+  return res.status(200).json({
+    success: true,
+    message: "Group Leaved Successfully",
+  });
+});
+
+export {
+  newGroupChat,
+  getMyChats,
+  getMyGroups,
+  addMembers,
+  removeMember,
+  leaveGroup,
+};
