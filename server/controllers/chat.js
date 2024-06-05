@@ -66,4 +66,24 @@ const getMyChats = TryCatch(async (req, res, next) => {
   });
 });
 
-export { newGroupChat, getMyChats };
+const getMyGroups = TryCatch(async (req, res, next) => {
+  const chats = await Chat.find({
+    members: req.user,
+    groupChat: true,
+    creator: req.user,
+  }).populate("members", "name avatar");
+
+  const groups = chats.map(({ members, _id, groupChat, name }) => ({
+    _id,
+    groupChat,
+    name,
+    avatar: members.slice(0, 3).map(({ avatar }) => avatar.url),
+  }));
+
+  return res.status(200).json({
+    success: true,
+    groups,
+  });
+});
+
+export { newGroupChat, getMyChats, getMyGroups };
