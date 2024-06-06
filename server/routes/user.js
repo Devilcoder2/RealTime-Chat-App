@@ -8,10 +8,11 @@ import {
 } from "../controllers/user.js";
 import { singleAvatar } from "../middlewares/multer.js";
 import { isAuthenticated } from "../middlewares/auth.js";
+import { registerValidator, validateHandler } from "../lib/validators.js";
 
 const app = express.Router();
 
-app.post("/new", singleAvatar, newUser);
+app.post("/new", singleAvatar, registerValidator(), validateHandler, newUser);
 
 app.post("/login", login);
 
