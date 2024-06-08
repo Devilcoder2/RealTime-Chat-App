@@ -1,4 +1,4 @@
-import { body, validationResult, check } from "express-validator";
+import { body, validationResult, check, param } from "express-validator";
 import { ErrorHandler } from "../utils/utility.js";
 
 const validateHandler = (req, res, next) => {
@@ -49,6 +49,10 @@ const removeMemberValidator = () => [
   body("userId", "Please Enter User ID").notEmpty(),
 ];
 
+const leaveGroupValidator = () => [
+  param("id", "Please Enter Chat ID").notEmpty(),
+];
+
 export {
   registerValidator,
   validateHandler,
@@ -56,4 +60,5 @@ export {
   newGroupValidator,
   addMemberValidator,
   removeMemberValidator,
+  leaveGroupValidator,
 };

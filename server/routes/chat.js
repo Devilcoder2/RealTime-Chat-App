@@ -16,6 +16,7 @@ import {
 import { attachmentMulter } from "../middlewares/multer.js";
 import {
   addMemberValidator,
+  leaveGroupValidator,
   newGroupValidator,
   removeMemberValidator,
   validateHandler,
@@ -41,7 +42,7 @@ app.put(
   removeMember
 );
 
-app.delete("/leave/:id", leaveGroup);
+app.delete("/leave/:id", leaveGroupValidator(), validateHandler, leaveGroup);
 
 app.post("/message", attachmentMulter, sendAttachments);
 
