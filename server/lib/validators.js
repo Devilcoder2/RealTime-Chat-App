@@ -35,9 +35,19 @@ const newGroupValidator = () => [
     .withMessage("Members must be 2-100"),
 ];
 
+const addMemberValidator = () => [
+  body("chatId", "Please Enter Chat ID").notEmpty(),
+  body("members")
+    .notEmpty()
+    .withMessage("Please Enter Message")
+    .isArray({ min: 1 })
+    .withMessage("Members must be 1-97"),
+];
+
 export {
   registerValidator,
   validateHandler,
   loginValidator,
   newGroupValidator,
+  addMemberValidator,
 };
