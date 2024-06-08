@@ -55,12 +55,7 @@ app.post(
   sendAttachments
 );
 
-app.get(
-  "/messages/:id",
-  chatIdValidatorValidator(),
-  validateHandler,
-  getMessages
-);
+app.get("/messages/:id", chatIdValidator(), validateHandler, getMessages);
 
 app
   .route("/:id")

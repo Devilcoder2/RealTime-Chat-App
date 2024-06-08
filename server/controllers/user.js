@@ -1,10 +1,12 @@
 //Create a new user and save it to the database and save in cookie
 import { TryCatch } from "../middlewares/error.js";
 import { User } from "../models/user.js";
-import { cookieOptions, sendToken } from "../utils/features.js";
+import { cookieOptions, emitEvent, sendToken } from "../utils/features.js";
 import { compare } from "bcrypt";
 import { ErrorHandler } from "../utils/utility.js";
 import { Chat } from "../models/chat.js";
+import { Request } from "../models/request.js";
+import { NEW_REQUEST } from "../constants/events.js";
 
 const newUser = async (req, res) => {
   const { name, username, password, bio } = req.body;
@@ -38,7 +40,7 @@ const login = TryCatch(async (req, res, next) => {
   sendToken(res, user, 201, `Welcome Back ${user.name}`);
 });
 
-const getMyProfile = TryCatch(async (req, res) => {
+const getMyProfile = TryCatch(async (req, res, next) => {
   const user = await User.findById(req.user);
 
   res.status(200).json({
@@ -47,7 +49,7 @@ const getMyProfile = TryCatch(async (req, res) => {
   });
 });
 
-const logout = TryCatch(async (req, res) => {
+const logout = TryCatch(async (req, res, next) => {
   return res
     .status(200)
     .cookie("chat-token", "", { ...cookieOptions, maxAge: 0 })
@@ -57,7 +59,7 @@ const logout = TryCatch(async (req, res) => {
     });
 });
 
-const searchUser = TryCatch(async (req, res) => {
+const searchUser = TryCatch(async (req, res, next) => {
   const { name = "" } = req.query;
 
   const myChats = await Chat.find({ groupChat: false, members: req.user });
@@ -66,7 +68,7 @@ const searchUser = TryCatch(async (req, res) => {
 
   const allUsersExceptMeAndFriends = await User.find({
     _id: { $nin: allUsersFromMyChats },
-    name: { $regex: name, $options: "i" },
+    // name: { $regex: name, $options: "i" },
   });
 
   const users = allUsersExceptMeAndFriends.map(({ id, name, avatar }) => ({
@@ -81,10 +83,28 @@ const searchUser = TryCatch(async (req, res) => {
   });
 });
 
-const sendFriendRequest = TryCatch(async (req, res) => {
+const sendFriendRequest = TryCatch(async (req, res, next) => {
+  const { userId } = req.body;
+
+  const request = await Request.findOne({
+    $or: [
+      { sender: req.user, receiver: userId },
+      { sender: userId, receiver: req.user },
+    ],
+  });
+
+  if (request) return next(new ErrorHandler("Request already sent", 400));
+
+  await Request.create({
+    sender: req.user,
+    receiver: userId,
+  });
+
+  emitEvent(req, NEW_REQUEST, [userId]);
+
   return res.status(200).json({
     success: true,
-    message: "Logged out successfully ",
+    message: "Friend Request Sent",
   });
 });
 
