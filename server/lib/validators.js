@@ -62,8 +62,11 @@ const sendAttachmentsValidator = () => [
     .withMessage("Attachments must be 1-5"),
 ];
 
-const getMessagesValidator = () => [
+const chatIdValidator = () => [param("id", "Please Enter Chat ID").notEmpty()];
+
+const renameValidator = () => [
   param("id", "Please Enter Chat ID").notEmpty(),
+  body("name", "Please Enter Name").notEmpty(),
 ];
 
 export {
@@ -75,5 +78,6 @@ export {
   removeMemberValidator,
   leaveGroupValidator,
   sendAttachmentsValidator,
-  getMessagesValidator,
+  chatIdValidator,
+  renameValidator,
 };
