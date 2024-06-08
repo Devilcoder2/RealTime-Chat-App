@@ -44,10 +44,16 @@ const addMemberValidator = () => [
     .withMessage("Members must be 1-97"),
 ];
 
+const removeMemberValidator = () => [
+  body("chatId", "Please Enter Chat ID").notEmpty(),
+  body("userId", "Please Enter User ID").notEmpty(),
+];
+
 export {
   registerValidator,
   validateHandler,
   loginValidator,
   newGroupValidator,
   addMemberValidator,
+  removeMemberValidator,
 };
