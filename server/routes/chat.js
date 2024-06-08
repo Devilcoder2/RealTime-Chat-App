@@ -14,13 +14,14 @@ import {
   sendAttachments,
 } from "../controllers/chat.js";
 import { attachmentMulter } from "../middlewares/multer.js";
+import { newGroupValidator, validateHandler } from "../lib/validators.js";
 
 const app = express.Router();
 
 //User must be logged In to access below routes
 app.use(isAuthenticated);
 
-app.post("/new", newGroupChat);
+app.post("/new", newGroupValidator(), validateHandler, newGroupChat);
 
 app.get("my", getMyChats);
 

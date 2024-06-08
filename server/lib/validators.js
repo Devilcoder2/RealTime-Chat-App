@@ -1,6 +1,18 @@
 import { body, validationResult, check } from "express-validator";
 import { ErrorHandler } from "../utils/utility.js";
 
+const validateHandler = (req, res, next) => {
+  const errors = validationResult(req);
+
+  const errorMessages = errors
+    .array()
+    .map((error) => error.msg)
+    .join(", ");
+
+  if (errors.isEmpty()) return next();
+  else next(new ErrorHandler(errorMessages, 400));
+};
+
 const registerValidator = () => [
   body("name", "Please Enter Name").notEmpty(),
   body("username", "Please Enter username").notEmpty(),
@@ -14,16 +26,18 @@ const loginValidator = () => [
   body("password", "Please Enter password").notEmpty(),
 ];
 
-const validateHandler = (req, res, next) => {
-  const errors = validationResult(req);
+const newGroupValidator = () => [
+  body("name", "Please Enter Name").notEmpty(),
+  body("members")
+    .notEmpty()
+    .withMessage("Please Enter Message")
+    .isArray({ min: 2, max: 100 })
+    .withMessage("Members must be 2-100"),
+];
 
-  const errorMessages = errors
-    .array()
-    .map((error) => error.msg)
-    .join(", ");
-
-  if (errors.isEmpty()) return next();
-  else next(new ErrorHandler(errorMessages, 400));
+export {
+  registerValidator,
+  validateHandler,
+  loginValidator,
+  newGroupValidator,
 };
-
-export { registerValidator, validateHandler, loginValidator };
