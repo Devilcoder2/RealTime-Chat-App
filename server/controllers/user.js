@@ -81,4 +81,11 @@ const searchUser = TryCatch(async (req, res) => {
   });
 });
 
-export { newUser, login, getMyProfile, logout, searchUser };
+const sendFriendRequest = TryCatch(async (req, res) => {
+  return res.status(200).json({
+    success: true,
+    message: "Logged out successfully ",
+  });
+});
+
+export { newUser, login, getMyProfile, logout, searchUser, sendFriendRequest };
