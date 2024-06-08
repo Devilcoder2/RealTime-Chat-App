@@ -19,6 +19,7 @@ import {
   leaveGroupValidator,
   newGroupValidator,
   removeMemberValidator,
+  sendAttachmentsValidator,
   validateHandler,
 } from "../lib/validators.js";
 
@@ -44,7 +45,13 @@ app.put(
 
 app.delete("/leave/:id", leaveGroupValidator(), validateHandler, leaveGroup);
 
-app.post("/message", attachmentMulter, sendAttachments);
+app.post(
+  "/message",
+  attachmentMulter,
+  sendAttachmentsValidator(),
+  validateHandler,
+  sendAttachments
+);
 
 app.get("/messages/:id", getMessages);
 

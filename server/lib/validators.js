@@ -53,6 +53,15 @@ const leaveGroupValidator = () => [
   param("id", "Please Enter Chat ID").notEmpty(),
 ];
 
+const sendAttachmentsValidator = () => [
+  body("chatId", "Please Enter Chat ID").notEmpty(),
+  check("files")
+    .notEmpty()
+    .withMessage("Please Upload Attachments")
+    .isArray({ min: 1, max: 5 })
+    .withMessage("Attachments must be 1-5"),
+];
+
 export {
   registerValidator,
   validateHandler,
@@ -61,4 +70,5 @@ export {
   addMemberValidator,
   removeMemberValidator,
   leaveGroupValidator,
+  sendAttachmentsValidator,
 };
