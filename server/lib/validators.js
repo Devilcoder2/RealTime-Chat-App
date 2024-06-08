@@ -62,6 +62,10 @@ const sendAttachmentsValidator = () => [
     .withMessage("Attachments must be 1-5"),
 ];
 
+const getMessagesValidator = () => [
+  param("id", "Please Enter Chat ID").notEmpty(),
+];
+
 export {
   registerValidator,
   validateHandler,
@@ -71,4 +75,5 @@ export {
   removeMemberValidator,
   leaveGroupValidator,
   sendAttachmentsValidator,
+  getMessagesValidator,
 };
