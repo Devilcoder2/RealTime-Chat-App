@@ -8,7 +8,7 @@ import { Chat } from "../models/chat.js";
 import { Request } from "../models/request.js";
 import { NEW_REQUEST } from "../constants/events.js";
 
-const newUser = async (req, res) => {
+const newUser = async (req, res, next) => {
   const { name, username, password, bio } = req.body;
 
   const avatar = {
@@ -42,6 +42,8 @@ const login = TryCatch(async (req, res, next) => {
 
 const getMyProfile = TryCatch(async (req, res, next) => {
   const user = await User.findById(req.user);
+
+  if (!user) return next(new ErrorHandler("User not found", 404));
 
   res.status(200).json({
     success: true,
@@ -117,7 +119,7 @@ const acceptFriendRequest = TryCatch(async (req, res, next) => {
 
   if (!request) return next(new ErrorHandler("Request Not found", 404));
 
-  if (request.receiver.toString() !== req.user.toString())
+  if (request.receiver._id.toString() !== req.user.toString())
     return next(
       new ErrorHandler("You are not authorized to accept this request", 401)
     );
@@ -150,6 +152,27 @@ const acceptFriendRequest = TryCatch(async (req, res, next) => {
   });
 });
 
+const getMyNotifications = TryCatch(async (req, res, next) => {
+  const requests = await Request.find({ receiver: req.user }).populate(
+    "sender",
+    "name avatar"
+  );
+
+  const allRequests = requests.map(({ _id, sender }) => ({
+    _id,
+    sender: {
+      _id: sender._id,
+      name: sender.name,
+      avatar: sender.avatar.url,
+    },
+  }));
+
+  return res.status(200).json({
+    success: true,
+    allRequests,
+  });
+});
+
 export {
   newUser,
   login,
@@ -158,4 +181,5 @@ export {
   searchUser,
   sendFriendRequest,
   acceptFriendRequest,
+  getMyNotifications,
 };
