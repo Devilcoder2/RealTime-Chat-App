@@ -3,6 +3,8 @@ import { Chat } from "../models/chat.js";
 import { User } from "../models/user.js";
 import { Message } from "../models/message.js";
 
+const adminLogin = TryCatch(async (req, res, next) => {});
+
 const allUsers = TryCatch(async (req, res, next) => {
   const users = await User.find({});
 
@@ -137,4 +139,4 @@ const getDashboardStats = TryCatch(async (req, res, next) => {
   });
 });
 
-export { allUsers, allChats, allMessags, getDashboardStats };
+export { allUsers, allChats, allMessags, getDashboardStats, adminLogin };
