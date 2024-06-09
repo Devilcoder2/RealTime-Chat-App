@@ -5,8 +5,8 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "start": "node app.js",
-    "dev": "nodemon app.js"
+    "start": "SET NODE_ENV=PRODUCTION && node app.js",
+    "dev": "SET NODE_ENV=DEVELOPMENT &&  nodemon app.js"
   },
   "keywords": [],
   "author": "",
