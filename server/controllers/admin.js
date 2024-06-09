@@ -29,6 +29,19 @@ const adminLogin = TryCatch(async (req, res, next) => {
     });
 });
 
+const adminLogout = TryCatch(async (req, res, next) => {
+  return res
+    .stats(200)
+    .cookie("chat-admin-token", "", {
+      ...cookieOptions,
+      maxAge: 0,
+    })
+    .json({
+      success: true,
+      message: "Logged out successfully",
+    });
+});
+
 const allUsers = TryCatch(async (req, res, next) => {
   const users = await User.find({});
 
@@ -163,4 +176,11 @@ const getDashboardStats = TryCatch(async (req, res, next) => {
   });
 });
 
-export { allUsers, allChats, allMessags, getDashboardStats, adminLogin };
+export {
+  allUsers,
+  allChats,
+  allMessags,
+  getDashboardStats,
+  adminLogin,
+  adminLogout,
+};

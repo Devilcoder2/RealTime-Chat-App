@@ -1,6 +1,7 @@
 import express from "express";
 import {
   adminLogin,
+  adminLogout,
   allChats,
   allMessags,
   allUsers,
@@ -14,7 +15,7 @@ app.get("/");
 
 app.post("/verify", adminLoginValidator(), validateHandler, adminLogin);
 
-app.get("/logout");
+app.get("/logout", adminLogout);
 
 app.get("/users", allUsers);
 
