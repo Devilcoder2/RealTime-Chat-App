@@ -1,5 +1,10 @@
 import express from "express";
-import { allChats, allMessags, allUsers } from "../controllers/admin.js";
+import {
+  allChats,
+  allMessags,
+  allUsers,
+  getDashboardStats,
+} from "../controllers/admin.js";
 
 const app = express.Router();
 
@@ -15,6 +20,6 @@ app.get("/chats", allChats);
 
 app.get("/messages", allMessags);
 
-app.get("/stats");
+app.get("/stats", getDashboardStats);
 
 export default app;

@@ -92,4 +92,49 @@ const allMessags = TryCatch(async (req, res, next) => {
   });
 });
 
-export { allUsers, allChats, allMessags };
+const getDashboardStats = TryCatch(async (req, res, next) => {
+  const [groupsCount, usersCount, messagesCount, totalChatsCount] =
+    await Promise.all([
+      Chat.countDocuments({ groupChat: true }),
+      User.countDocuments(),
+      Message.countDocuments(),
+      Chat.countDocuments(),
+    ]);
+
+  const today = new Date();
+
+  const last7Days = new Date();
+  last7Days.setDate(last7Days.getDate() - 7);
+
+  const lasat7DaysMessages = await Message.find({
+    createdAt: {
+      $gte: last7Days,
+      $lte: today,
+    },
+  }).select("createdAt");
+
+  const messages = new Array(7).fill(0);
+  const dayInMilliSeconds = 1000 * 60 * 60 * 24;
+
+  lasat7DaysMessages.forEach((message) => {
+    const indexApprox =
+      (today.getTime() - message.createdAt.getTime()) / dayInMilliSeconds;
+    const index = Math.floor(indexApprox);
+    messages[6 - index]++;
+  });
+
+  const stats = {
+    groupsCount,
+    usersCount,
+    messagesCount,
+    totalChatsCount,
+    messages,
+  };
+
+  return res.status(200).json({
+    success: true,
+    stats,
+  });
+});
+
+export { allUsers, allChats, allMessags, getDashboardStats };
