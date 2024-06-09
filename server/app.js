@@ -3,6 +3,8 @@ import dotenv from "dotenv";
 import express from "express";
 import { errorMiddleware } from "./middlewares/error.js";
 import { connectDB } from "./utils/features.js";
+import cookieParser from "cookie-parser";
+import { Server } from "socket.io";
 
 import chatRoute from "./routes/chat.js";
 import userRoute from "./routes/user.js";
@@ -20,6 +22,7 @@ const adminSecretKey = process.env.ADMIN_SECRET_KEY || "aldkfalsjdkf";
 connectDB(mongoURI);
 
 const app = express();
+const io = new Server(app, {});
 
 app.use(express.json());
 app.use(cookieParser());
