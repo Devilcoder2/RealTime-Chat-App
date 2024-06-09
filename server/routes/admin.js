@@ -1,5 +1,5 @@
 import express from "express";
-import { allUsers } from "../controllers/admin.js";
+import { allChats, allUsers } from "../controllers/admin.js";
 
 const app = express.Router();
 
@@ -11,7 +11,7 @@ app.get("/logout");
 
 app.get("/users", allUsers);
 
-app.get("/chats");
+app.get("/chats", allChats);
 
 app.get("/messages");
 
