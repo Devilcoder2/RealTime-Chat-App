@@ -3,7 +3,6 @@ import dotenv from "dotenv";
 import express from "express";
 import { errorMiddleware } from "./middlewares/error.js";
 import { connectDB } from "./utils/features.js";
-import cookieParser from "cookie-parser";
 import { Server, Socket } from "socket.io";
 import { createServer } from "http";
 import { v4 as uuid } from "uuid";

@@ -1,5 +1,4 @@
-import { validate } from "uuid";
-import { envMode } from "../app";
+import { envMode } from "../app.js";
 
 const errorMiddleware = (err, req, res, next) => {
   err.message ||= "Internal Server Error";
@@ -31,4 +30,4 @@ const TryCatch = (passedFunc) => async (req, res, next) => {
   }
 };
 
-export { errorMiddleware, TryCatch };
+export { TryCatch, errorMiddleware };
