@@ -1,7 +1,12 @@
 //Create a new user and save it to the database and save in cookie
 import { TryCatch } from "../middlewares/error.js";
 import { User } from "../models/user.js";
-import { cookieOptions, emitEvent, sendToken } from "../utils/features.js";
+import {
+  cookieOptions,
+  emitEvent,
+  sendToken,
+  uploadFilesToCloudinary,
+} from "../utils/features.js";
 import { compare } from "bcrypt";
 import { ErrorHandler } from "../utils/utility.js";
 import { Chat } from "../models/chat.js";
@@ -16,9 +21,11 @@ const newUser = TryCatch(async (req, res, next) => {
 
   if (!file) return next(new ErrorHandler("Please Upload Avatar"));
 
+  const result = await uploadFilesToCloudinary([file]);
+
   const avatar = {
-    public_id: "adsfasdf",
-    url: "adlkfads",
+    public_id: result[0].public_id,
+    url: result[0].url,
   };
 
   const user = await User.create({
