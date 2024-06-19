@@ -5,6 +5,7 @@ import { LayoutLoader } from "./components/layout/Loaders";
 import axios from "axios";
 import { server } from "./constants/config.js";
 import { useDispatch, useSelector } from "react-redux";
+import { Toaster } from "react-hot-toast";
 
 const Home = lazy(() => import("./pages/Home"));
 const Login = lazy(() => import("./pages/Login"));
@@ -60,6 +61,8 @@ const App = () => {
             <Route path="*" element={<NotFound />} />
           </Routes>
         </Suspense>
+
+        <Toaster position="bottom-center" />
       </BrowserRouter>
     </>
   );
